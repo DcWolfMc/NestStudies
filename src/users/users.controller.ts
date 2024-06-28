@@ -7,9 +7,12 @@ import {
   Patch,
   Post,
   Query,
-  Put,
 } from '@nestjs/common';
+import { ParseIntPipe, ValidationPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+
 @Controller('users')
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
@@ -27,29 +30,29 @@ export class UsersController {
   //:id most be declared after all possible users get calls
   //its a waterfall
   @Get(':id') // GET /users/:id
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(Number(id));
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.findOne(id);
   }
+  
   @Post() // POST /users
-  create(@Body() user: {
-    name: string;
-    email: string;
-    role: 'INTERN' | 'ENGINEER' | 'ADMIN';
-  }) {
+  create(
+    @Body(ValidationPipe)
+    user: CreateUserDto, // One possible pattern for this would be createUserDto
+  ) {
     return this.userService.create(user);
   }
 
   @Patch(':id') // PATCH /users/:id
-  update(@Param('id') id: string, @Body() userUpdate: {
-    name?: string;
-    email?: string;
-    role?: 'INTERN' | 'ENGINEER' | 'ADMIN';
-  }) {
-    return this.userService.update(Number(id), userUpdate);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body(ValidationPipe)
+    userUpdate: UpdateUserDto, // One possible pattern for this would be updateUserDto
+  ) {
+    return this.userService.update(id, userUpdate);
   }
 
   @Delete(':id') // DELETE /users/:id
-  delete(@Param('id') id: string) {
-    return this.userService.delete(Number(id));
+  delete(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.delete(id);
   }
 }
