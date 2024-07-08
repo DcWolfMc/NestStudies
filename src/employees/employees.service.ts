@@ -6,7 +6,9 @@ export class EmployeesService {
   constructor(private readonly databaseService: DatabaseService) {}
 
   async create(createEmployeeDto: Prisma.EmployeeCreateInput) {
-    return this.databaseService.employee.create({ data: createEmployeeDto });
+    return this.databaseService.$transaction(async (prisma) => {
+      return prisma.employee.create({ data: createEmployeeDto });
+    });
   }
 
   async findAll(role?: 'INTERN' | 'ENGINEER' | 'ADMIN') {
@@ -20,9 +22,11 @@ export class EmployeesService {
   }
 
   async update(id: number, updateEmployeeDto: Prisma.EmployeeUpdateInput) {
-    return this.databaseService.employee.update({
-      where: { id },
-      data: updateEmployeeDto,
+    return this.databaseService.$transaction(async (prisma) => {
+      return prisma.employee.update({
+        where: { id },
+        data: updateEmployeeDto,
+      });
     });
   }
 
