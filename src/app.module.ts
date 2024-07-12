@@ -8,6 +8,9 @@ import { EmployeesModule } from './employees/employees.module';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { LoggerModule } from './logger/logger.module';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import { envSchema } from './env';
 
 @Module({
   imports: [
@@ -20,6 +23,11 @@ import { LoggerModule } from './logger/logger.module';
       { name: 'long', ttl: 60000, limit: 100 },
     ]),
     LoggerModule,
+    AuthModule,
+    ConfigModule.forRoot({
+      validate: (env) => envSchema.parse(env),
+      isGlobal: true,
+    }),
   ],
   controllers: [AppController],
   providers: [
