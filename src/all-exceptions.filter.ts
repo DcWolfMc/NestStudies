@@ -46,11 +46,14 @@ export class AllExceptionFilter extends BaseExceptionFilter {
       if (exception.code === 'P2002') {
         // Unique constraint failed
         responseObj.statusCode = HttpStatus.CONFLICT;
-        responseObj.response = 'A user with this email already exists.';
-          // 'Unique constraint failed on the field: ' + exception.meta.target;
+
+        responseObj.response =
+          'Unique constraint failed on the field: ' + exception.meta.target;
+        // `A user with this ${exception.meta.target} already exists.`;
+        // 'Unique constraint failed on the field: ' + exception.meta.target;
       } else {
         responseObj.statusCode = HttpStatus.BAD_REQUEST;
-        responseObj.response = exception.message.replaceAll(/\n/g, ' ');;
+        responseObj.response = exception.message.replaceAll(/\n/g, ' ');
       }
     } else {
       responseObj.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
