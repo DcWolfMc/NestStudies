@@ -28,12 +28,17 @@ export class AuthService {
     if (!isPasswordValid) {
       throw new UnauthorizedException('User credentials do not match.');
     }
-    return this.generateUserTokens(user.id)
+    return this.generateUserTokens(user.id);
   }
 
   async generateUserTokens(userId) {
     const accessToken = this.jwt.sign({ sub: userId }, { expiresIn: '1h' });
-
+    const isRefreshToken = await this.databaseService.refreshToken.findUnique({
+      where: { userId },
+    });
+    if (isRefreshToken) {
+      await this.databaseService.refreshToken.delete({ where: { userId } });
+    }
     const refreshToken = await this.createRefreshToken(userId);
 
     return { accessToken, refreshToken, userId };
@@ -58,8 +63,7 @@ export class AuthService {
     return this.generateUserTokens(token.userId);
   }
 
-
-  async getAll(){
-    return this.databaseService.refreshToken.findMany()
+  async getAll() {
+    return this.databaseService.refreshToken.findMany();
   }
 }

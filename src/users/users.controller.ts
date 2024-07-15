@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { ParseIntPipe, ValidationPipe } from '@nestjs/common';
@@ -13,6 +14,7 @@ import { UsersService } from './users.service';
 import { Prisma } from '@prisma/client';
 import { FindUserDto } from './dto/find-user.dto';
 import { AuthGuard } from '@nestjs/passport';
+import type { Request } from 'express';
 
 @Controller('users')
 @UseGuards(AuthGuard('jwt'))
@@ -20,7 +22,8 @@ export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
   @Get() // GET /users or /users?role=value
-  findAll() {
+  findAll(@Req() req: Request) {
+    console.log("find All log",req.user);
     return this.userService.findAll();
   }
 

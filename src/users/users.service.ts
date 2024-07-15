@@ -20,9 +20,7 @@ export class UsersService {
   }
 
   async findAll() {
-    return await this.databaseService.user.findMany({
-      include: { refreshToken: true },
-    });
+    return await this.databaseService.user.findMany({});
   }
 
   async findOne(
