@@ -8,7 +8,6 @@ import { Env } from 'src/env';
 import { AuthController } from './auth.controller';
 import { DatabaseModule } from 'src/database/database.module';
 import { JwtStrategy } from './jwt.strategy';
-import { AuthenticationGuard } from './guards/authentication.guard';
 
 @Module({
   imports: [
@@ -27,7 +26,7 @@ import { AuthenticationGuard } from './guards/authentication.guard';
     }),
     DatabaseModule,
   ],
-  providers: [AuthService, JwtStrategy, AuthenticationGuard],
+  providers: [AuthService, JwtStrategy],
   controllers: [AuthController],
   exports: [AuthService],
 })

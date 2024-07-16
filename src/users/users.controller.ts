@@ -13,9 +13,7 @@ import { ParseIntPipe, ValidationPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Prisma } from '@prisma/client';
 import { FindUserDto } from './dto/find-user.dto';
-import { AuthGuard } from '@nestjs/passport';
 import type { Request } from 'express';
-import { AuthenticationGuard } from 'src/auth/guards/authentication.guard';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('users')

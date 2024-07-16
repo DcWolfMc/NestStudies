@@ -14,7 +14,7 @@ type TokenSchema = z.infer<typeof tokenSchema>;
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(config: ConfigService<Env, true>) {
     const publicKey = config.get('JWT_PUBLIC_KEY', { infer: true });
-    
+
     const customExtractor = (req) => {
       let token = ExtractJwt.fromHeader('new-access-token')(req);
       if (!token) {
