@@ -3,8 +3,7 @@ import { authenticateDTO } from './dto/authenticate.auth.dto';
 import { DatabaseService } from 'src/database/database.service';
 import { compare } from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
-import { v4 as uuidv4 } from 'uuid';
-import { NotFoundError } from 'rxjs';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -43,6 +42,7 @@ export class AuthService {
 
     return { accessToken, refreshToken, userId };
   }
+
   async createRefreshToken(userId: number) {
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 2); //expiry date of 2 days
@@ -58,9 +58,13 @@ export class AuthService {
       where: { token: refreshToken, expirationDate: { gte: new Date() } },
     });
     if (!token) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException("refreshTokenError - Token not found.");
     }
     return this.generateUserTokens(token.userId);
+  }
+
+  verifyToken(token: string) {
+    return this.jwt.verify(token);
   }
 
   async getAll() {

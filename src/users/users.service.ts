@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import { Prisma } from '@prisma/client';
 import { hash } from 'bcryptjs';
+import { FindUserDto } from './dto/find-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -25,8 +26,11 @@ export class UsersService {
 
   async findOne(
     id: number,
-    includeRefreshToken: boolean = false,
-    includeComments: boolean = false,
+    {
+      includeComments = false,
+      includeRefreshToken = false,
+      refreshToken,
+    }: FindUserDto,
   ) {
     return this.databaseService.user.findFirst({
       where: { id },

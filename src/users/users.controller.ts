@@ -15,15 +15,17 @@ import { Prisma } from '@prisma/client';
 import { FindUserDto } from './dto/find-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import type { Request } from 'express';
+import { AuthenticationGuard } from 'src/auth/guards/authentication.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('users')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
   @Get() // GET /users or /users?role=value
   findAll(@Req() req: Request) {
-    console.log("find All log",req.user);
+    console.log('find All log', req.user);
     return this.userService.findAll();
   }
 
@@ -37,7 +39,7 @@ export class UsersController {
 
   @Get(':id') // GET /users/:id
   findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.userService.findOne(id);
+    return this.userService.findOne(id,{});
   }
 
   @Post() // POST /users
@@ -67,6 +69,11 @@ export class UsersController {
     @Param('id', ParseIntPipe) id: number,
     @Body(ValidationPipe) findUserDto: FindUserDto,
   ) {
-    const { includeComments, includeRefreshToken } = findUserDto;
+    const { includeComments, includeRefreshToken, refreshToken } = findUserDto;
+    return this.userService.findOne(id, {
+      includeRefreshToken,
+      includeComments,
+      refreshToken,
+    });
   }
 }
