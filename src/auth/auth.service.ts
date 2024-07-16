@@ -31,7 +31,7 @@ export class AuthService {
   }
 
   async generateUserTokens(userId) {
-    const accessToken = this.jwt.sign({ sub: userId }, { expiresIn: '10s' });
+    const accessToken = this.jwt.sign({ sub: userId }, { expiresIn: '1h' });
     const isRefreshToken = await this.databaseService.refreshToken.findUnique({
       where: { userId },
     });
