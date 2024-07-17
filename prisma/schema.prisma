@@ -34,7 +34,8 @@ model Product {
   id                 Int       @id @default(autoincrement())
   title              String    @unique
   description        String
-  category           String
+  categoryTitle      String
+  category           Category   @relation(fields: [categoryTitle], references: [title])
   price              Float
   discountPercentage Float
   rating             Float
@@ -45,6 +46,12 @@ model Product {
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
   comments           Comment[]
+}
+
+model Category {
+  id Int @id @default(autoincrement())
+  title String @unique
+  products Product[]
 }
 
 model User {
