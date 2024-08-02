@@ -25,7 +25,7 @@ export class CategoriesController {
   }
 
   @Get()
-  find(@Query(ValidationPipe) query) {
+  find(@Query(new ValidationPipe({transform:true})) query:GetCategoryDto) {
     return this.categoriesService.find(query);
   }
 }

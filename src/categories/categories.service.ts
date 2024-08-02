@@ -17,6 +17,7 @@ export class CategoriesService {
   async find(query: GetCategoryDto) {
     const { categories, products } = query;
     let categoryIds = []
+  
     
     if(categories)
       categoryIds = categories.split(',').map((id) => parseInt(id, 10));
@@ -24,13 +25,13 @@ export class CategoriesService {
     
     if (!categoryIds.length) {
       return await this.databaseService.category.findMany({
-        include: { products: Boolean(products) || false },
+        include: { products: products || false },
       });
     }
 
     return await this.databaseService.category.findMany({
       where: { id: { in: categoryIds } },
-      include: { products: Boolean(products) || false },
+      include: { products: products || false },
     });
   }
 }
