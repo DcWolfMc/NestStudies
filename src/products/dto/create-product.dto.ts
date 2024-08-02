@@ -37,12 +37,12 @@ export class CreateProductDto {
   categoryTitle: string;
 
   @IsDefined()
-  @IsInt()
+  @IsNumber()
   @IsNotEmpty()
   price: number;
 
   @IsDefined()
-  @IsInt()
+  @IsNumber()
   @IsNotEmpty()
   discountPercentage: number;
   
