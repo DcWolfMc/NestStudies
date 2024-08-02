@@ -36,7 +36,7 @@ model Product {
   description        String
   categoryTitle      String
   category           Category   @relation(fields: [categoryTitle], references: [title])
-  price              Float
+  price              Int
   discountPercentage Float
   rating             Float
   stock              Int
